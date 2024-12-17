@@ -39,13 +39,13 @@ loadData();
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (form.elements.email.value && form.elements.message.value !== '') {
+  if (form.elements.email.value || form.elements.message.value !== '') {
     const data = loadFromLS(STORAGE_KEY) || {};
     localStorage.removeItem(STORAGE_KEY);
     form.reset();
     const sendData = {
-      email: data.mail,
-      message: data.text,
+      email: data.mail.trim(),
+      message: data.text.trim(),
     };
     console.log(sendData);
   } else {
