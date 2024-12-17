@@ -3,4 +3,4 @@ import"./assets/styles-DrIq9iVw.js";/* empty css                     */import{S 
         <img class="gallery-image" src="${p}" alt="${a}" />
     </a>
 </li>`).join("");new i(".gallery a",{captionsData:"alt",captionDelay:250});
-//# sourceMappingURL=1-gallery.js.map
+//# sourceMappingURL=1-gallery.Cqzp7SYY.js.map
