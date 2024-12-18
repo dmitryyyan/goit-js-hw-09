@@ -1,9 +1,10 @@
-const STORAGE_KEY = '"feedback-form-state"';
+
+const STORAGE_KEY = 'feedback-form-state';
 const form = document.querySelector('.feedback-form');
 
 form.addEventListener('input', () => {
-  const userMail = form.elements.email.value;
-  const userText = form.elements.message.value;
+  const userMail = form.elements.email.value.trim();
+  const userText = form.elements.message.value.trim();
 
   const data = {
     mail: userMail,
@@ -13,42 +14,49 @@ form.addEventListener('input', () => {
   saveInLS(STORAGE_KEY, data);
 });
 
-function loadFromLS(key) {
-  const data = localStorage.getItem(key);
-  try {
-    const result = JSON.parse(data);
-    return result;
-  } catch {
-    return data;
-  }
-}
-
 function saveInLS(key, value) {
   const jsonSave = JSON.stringify(value);
   localStorage.setItem(key, jsonSave);
 }
 
-function loadData() {
-  const { mail, text } = loadFromLS(STORAGE_KEY) || {};
-  form.elements.email.value = mail || '';
-  form.elements.message.value = text || '';
+function loadFromLS(key) {
+  const data = localStorage.getItem(key);
+  try {
+    return JSON.parse(data);
+  } catch {
+    return null;
+  }
 }
 
-loadData();
+function loadData() {
+  const data = loadFromLS(STORAGE_KEY);
+  if (data) {
+    const { mail = '', text = '' } = data;
+    form.elements.email.value = mail;
+    form.elements.message.value = text;
+  }
+}
 
 form.addEventListener('submit', e => {
   e.preventDefault();
 
-  if (form.elements.email.value || form.elements.message.value !== '') {
-    const data = loadFromLS(STORAGE_KEY) || {};
-    localStorage.removeItem(STORAGE_KEY);
-    form.reset();
-    const sendData = {
-      email: data.mail.trim(),
-      message: data.text.trim(),
-    };
-    console.log(sendData);
-  } else {
-    alert(`Please fill in all form fields before submitting.`);
+  const email = form.elements.email.value.trim();
+  const message = form.elements.message.value.trim();
+
+  if (!email || !message) {
+    alert('Please fill in all form fields before submitting.');
+    return;
   }
+
+  const sendData = { email, message };
+  console.log(sendData);
+
+ 
+  localStorage.removeItem(STORAGE_KEY);
+  form.reset();
+
+  alert('Form successfully submitted!');
 });
+
+
+loadData();
